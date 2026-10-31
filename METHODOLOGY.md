@@ -3,7 +3,7 @@
 ## Setup
 
 - **ObsessionDB:** free developer tier, single node, 4 vCPU / 8 GB RAM, region eu-central.
-- **ClickHouse Cloud:** 1 replica, fixed 12 GiB / 3 vCPU (autoscaling off: min = max), region AWS eu-central-1. This is the closest single-node size ClickHouse Cloud offers to ObsessionDB's instance; it has 1 fewer vCPU and 4 GB more memory, and the site states both sizes.
+- **ClickHouse Cloud:** 1 replica, fixed 12 GiB / 3 vCPU (autoscaling off: min = max), region AWS eu-central-1. This is the closest single-node size ClickHouse Cloud offers to ObsessionDB's instance. **The instances differ:** ObsessionDB has 4 vCPU / 8 GB and ClickHouse Cloud 3 vCPU / 12 GiB, so CPU-heavy queries favour ObsessionDB and memory-heavy work favours ClickHouse Cloud. The site shows both sizes next to the results.
 - Both are reached over HTTPS (port 8443) from the same sandbox, with the same client library and settings.
 - Data: the public ClickBench `hits` dataset (https://github.com/ClickHouse/ClickBench), first 10 partitioned parquet files (10 million rows). The size is a setting in the harness, so it can be raised.
 
@@ -12,6 +12,7 @@
 - Same schema (ClickBench's own `create.sql` for ClickHouse), same data, same queries, same order and seed for every contender.
 - Warm-up before timing: every query runs once untimed, so ClickHouse Cloud's idle wake-up and first-touch caching aren't counted against it.
 - No vendor-specific tuning beyond what ClickBench's ClickHouse setup uses. No query result cache (`use_query_cache = 0`).
+- **Headline:** the geometric mean of each query's median server time, the way ClickBench itself summarises results, so no single query decides the ranking. p99 is published too, but with 43 queries x 5 runs it is close to the slowest query alone, so it is not the headline.
 - Two timings for every query: **server time** from `system.query_log` (`query_duration_ms`), which removes network distance, and **end-to-end time** at the client. Headline latency metrics use server time; end-to-end is published alongside.
 - Each run records the service versions (`SELECT version()`), region and instance size in the results.
 
@@ -30,6 +31,10 @@
 
 This benchmark was built by Letter (The Letter Company) for ObsessionDB, a Letter customer. The code, data source and raw results are in the repo, so anyone can rerun it against their own accounts and check the numbers.
 
+## Concurrency and memory
+
+The concurrent scenario uses 4 clients so the 8 GB instance stays inside its memory limit. A query that still runs out of memory is recorded as failed for that contender, counted in the results and named on the site. If server-side times are missing for some queries, only the metrics from the affected scenario fall back or are left out, and the note says which.
+
 ## Contenders
 
 - **ObsessionDB** (`subject`): https://obsessiondb.com. Reads `OBSESSIONDB_HOST`, `OBSESSIONDB_PORT`, `OBSESSIONDB_USER`, `OBSESSIONDB_PASSWORD`.
@@ -39,10 +44,11 @@ This benchmark was built by Letter (The Letter Company) for ObsessionDB, a Lette
 
 | Metric | Field | Unit | Direction |
 | --- | --- | --- | --- |
-| p99 query latency (primary) | `p99_latency_ms` | ms | lower is better |
-| Median query latency | `p50_latency_ms` | ms | lower is better |
+| Typical query time (geometric mean) (primary) | `geomean_query_ms` | ms | lower is better |
 | Full ClickBench suite time | `suite_seconds` | s | lower is better |
-| p99 latency with 8 concurrent clients | `concurrent_p99_ms` | ms | lower is better |
+| Median query latency | `p50_latency_ms` | ms | lower is better |
+| p99 query latency | `p99_latency_ms` | ms | lower is better |
+| p99 latency with 4 concurrent clients | `concurrent_p99_ms` | ms | lower is better |
 | Data load speed | `load_rows_per_sec` | rows/s | higher is better |
 | Cost per 1,000 queries (list price) | `cost_per_1k_queries_usd` | USD | lower is better |
 
@@ -50,7 +56,7 @@ This benchmark was built by Letter (The Letter Company) for ObsessionDB, a Lette
 
 - **Data load** (`load`): Create the standard ClickBench `hits` table and load the same 10 million rows (the first 10 partitioned ClickBench parquet files) into each service. The load runs server-side from the public dataset URLs, so the sandbox never holds the data. Timed from first insert to the final row count matching.
 - **ClickBench, warm** (`clickbench_warm`): All 43 ClickBench queries, one client. Each query runs once untimed as a warm-up, then 5 timed runs. Per-query p50 and p99 come from the timed runs; suite time is the sum of per-query medians.
-- **Concurrent load** (`concurrent`): 8 clients each run the 43 queries in a shuffled order (same seed for every contender) for 3 rounds after the warm-up. Reports p99 latency across all queries, to show consistency under load.
+- **Concurrent load** (`concurrent`): 4 clients each run the 43 queries in a shuffled order (same seed for every contender) for 3 rounds after the warm-up. Reports p99 latency across all queries and how many failed, to show consistency under load. 4 clients keeps the smallest instance (8 GB) inside its memory; failures are still recorded, never hidden.
 
 ## What a result means
 

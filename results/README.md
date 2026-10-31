@@ -29,9 +29,10 @@
 			"name": "ObsessionDB",
 			"status": "ok",
 			"metrics": {
-				"p99_latency_ms": 0,
-				"p50_latency_ms": 0,
+				"geomean_query_ms": 0,
 				"suite_seconds": 0,
+				"p50_latency_ms": 0,
+				"p99_latency_ms": 0,
 				"concurrent_p99_ms": 0,
 				"load_rows_per_sec": 0,
 				"cost_per_1k_queries_usd": 0
@@ -43,9 +44,10 @@
 			"name": "ClickHouse Cloud",
 			"status": "skipped",
 			"metrics": {
-				"p99_latency_ms": null,
-				"p50_latency_ms": null,
+				"geomean_query_ms": null,
 				"suite_seconds": null,
+				"p50_latency_ms": null,
+				"p99_latency_ms": null,
 				"concurrent_p99_ms": null,
 				"load_rows_per_sec": null,
 				"cost_per_1k_queries_usd": null

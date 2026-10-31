@@ -26,18 +26,11 @@
 	],
 	"metrics": [
 		{
-			"key": "p99_latency_ms",
-			"label": "p99 query latency",
+			"key": "geomean_query_ms",
+			"label": "Typical query time (geometric mean)",
 			"unit": "ms",
 			"better": "lower",
 			"primary": true
-		},
-		{
-			"key": "p50_latency_ms",
-			"label": "Median query latency",
-			"unit": "ms",
-			"better": "lower",
-			"primary": false
 		},
 		{
 			"key": "suite_seconds",
@@ -47,8 +40,22 @@
 			"primary": false
 		},
 		{
+			"key": "p50_latency_ms",
+			"label": "Median query latency",
+			"unit": "ms",
+			"better": "lower",
+			"primary": false
+		},
+		{
+			"key": "p99_latency_ms",
+			"label": "p99 query latency",
+			"unit": "ms",
+			"better": "lower",
+			"primary": false
+		},
+		{
 			"key": "concurrent_p99_ms",
-			"label": "p99 latency with 8 concurrent clients",
+			"label": "p99 latency with 4 concurrent clients",
 			"unit": "ms",
 			"better": "lower",
 			"primary": false
@@ -82,7 +89,7 @@
 		{
 			"key": "concurrent",
 			"label": "Concurrent load",
-			"description": "8 clients each run the 43 queries in a shuffled order (same seed for every contender) for 3 rounds after the warm-up. Reports p99 latency across all queries, to show consistency under load."
+			"description": "4 clients each run the 43 queries in a shuffled order (same seed for every contender) for 3 rounds after the warm-up. Reports p99 latency across all queries and how many failed, to show consistency under load. 4 clients keeps the smallest instance (8 GB) inside its memory; failures are still recorded, never hidden."
 		}
 	],
 	"results": {

@@ -37,7 +37,7 @@ The published file is `results/latest.json` on `main`.
 The same results, readable: https://obsessionbench.com
 
 Compare each contender's metrics. Run-to-run noise is expected; METHODOLOGY.md says what counts
-as a real difference. The primary metric is `p99_latency_ms` (lower is better).
+as a real difference. The primary metric is `geomean_query_ms` (lower is better).
 
 ## 5. Report a difference
 

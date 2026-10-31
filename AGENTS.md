@@ -14,7 +14,7 @@ no longer works as written.
 - Next.js (App Router, TypeScript) with `app/` at the repo root (no `src/`), fully static:
   `npm run build` passes with no environment variables set.
 - `/`: the leaderboard from `results/latest.json`, ranked on the primary metric
-  `p99_latency_ms` (lower is better), with each contender's status, the
+  `geomean_query_ms` (lower is better), with each contender's status, the
   summary and the date of the run.
 - `/methodology` (METHODOLOGY.md), `/replicate` (REPLICATE.md), `/results` (every file in
   `results/history/`, newest first), `/results/latest.json` (the file as it is).

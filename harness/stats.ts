@@ -12,6 +12,11 @@ export function sum(values: number[]): number {
 	return values.reduce((a, b) => a + b, 0);
 }
 
+export function geomean(values: number[]): number | null {
+	if (values.length === 0 || values.some((v) => !(v > 0))) return null;
+	return Math.exp(sum(values.map((v) => Math.log(v))) / values.length);
+}
+
 export function round(value: number | null, digits: number): number | null {
 	if (value === null || !Number.isFinite(value)) return null;
 	const f = 10 ** digits;

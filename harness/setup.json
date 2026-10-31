@@ -15,7 +15,7 @@
 	"query_timeout_seconds": 60,
 	"load_timeout_seconds": 3600,
 	"concurrent": {
-		"clients": 8,
+		"clients": 4,
 		"rounds": 3,
 		"seed": 20261031
 	},

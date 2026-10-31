@@ -11,7 +11,6 @@ export function GET() {
 		"",
 		`A public benchmark of ${bench.subject.name} (${bench.subject.url}) against ${bench.competitors.map((c) => `${c.name} (${c.url})`).join(", ")}.`,
 		`Primary metric: ${primaryMetric.label} (\`${primaryMetric.key}\`, ${primaryMetric.unit}, ${primaryMetric.better} is better).`,
-		"Built by Letter (The Letter Company) for ObsessionDB, a Letter customer. The code, data source and raw results are in the repo.",
 		"",
 		`- Leaderboard: ${bench.site}/`,
 		`- Methodology: ${bench.site}/methodology`,

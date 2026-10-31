@@ -67,4 +67,4 @@ no longer works as written.
 
 - Anything under `.github/workflows/`: the schedule is Letter's, not CI's.
 - Results edited by hand.
-- The disclosure taken out of README.md.
+

@@ -44,10 +44,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 				<footer className="site-footer">
 					<div className="wrap">
 						<p>
-							This benchmark was built by Letter (The Letter Company) for ObsessionDB, a Letter customer. The code, data source and raw results are in the
-							repo, so anyone can rerun it against their own accounts and check the numbers.
-						</p>
-						<p>
 							<a href="/results/latest.json">results/latest.json</a> · <a href="/llms.txt">llms.txt</a> · {bench.license} license
 						</p>
 					</div>

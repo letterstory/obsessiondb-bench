@@ -1,0 +1,46 @@
+{
+	"clickbench": {
+		"repo": "https://github.com/ClickHouse/ClickBench",
+		"commit": "0cb36ab1a62c445414828aae1c9dccacb71af37b",
+		"create": "clickhouse-cloud/create.sql",
+		"queries": "clickhouse-cloud/queries.sql",
+		"dataset": "https://datasets.clickhouse.com/hits_compatible/athena_partitioned/hits_{n}.parquet",
+		"dataset_files": 100
+	},
+	"database": "obsessionbench",
+	"defaults": {
+		"scale": 10,
+		"repetitions": 5
+	},
+	"query_timeout_seconds": 60,
+	"load_timeout_seconds": 3600,
+	"concurrent": {
+		"clients": 8,
+		"rounds": 3,
+		"seed": 20261031
+	},
+	"contenders": {
+		"subject": {
+			"env": ["OBSESSIONDB_HOST", "OBSESSIONDB_PORT", "OBSESSIONDB_USER", "OBSESSIONDB_PASSWORD"],
+			"instance": "Free developer tier, single node, 4 vCPU / 8 GB RAM",
+			"region": "eu-central",
+			"price": {
+				"usd_per_hour": 0.438356,
+				"basis": "Nearest paid ObsessionDB equivalent of the free 4 vCPU / 8 GB instance: one 16 GB node (2 compute units, 4 vCPU), the smallest paid size with at least 4 vCPU and 8 GB, at the listed $20 per GB of memory per node per month = $320/month, divided by 730 hours a month (the free tier is not used as the price)",
+				"source_url": "https://obsessiondb.com/pricing",
+				"read_on": "2026-10-31"
+			}
+		},
+		"clickhouse-cloud": {
+			"env": ["CLICKHOUSE_CLOUD_HOST", "CLICKHOUSE_CLOUD_PORT", "CLICKHOUSE_CLOUD_USER", "CLICKHOUSE_CLOUD_PASSWORD"],
+			"instance": "1 replica, fixed 12 GiB / 3 vCPU (autoscaling off: min = max)",
+			"region": "AWS eu-central-1",
+			"price": {
+				"usd_per_hour": 0.39375,
+				"basis": "ClickHouse Cloud Basic plan (its 1-replica 12 GiB / 3 vCPU size) in AWS eu-central-1: $0.2625 per compute-unit-hour (1 unit = 8 GiB / 2 vCPU) x 1.5 units",
+				"source_url": "https://clickhouse.com/pricing",
+				"read_on": "2026-10-31"
+			}
+		}
+	}
+}

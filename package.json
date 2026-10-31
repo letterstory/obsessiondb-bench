@@ -1,0 +1,29 @@
+{
+	"name": "obsessionbench",
+	"version": "1.0.0",
+	"private": true,
+	"license": "MIT",
+	"type": "module",
+	"engines": {
+		"node": ">=24"
+	},
+	"scripts": {
+		"dev": "next dev",
+		"build": "next build",
+		"start": "next start",
+		"bench": "node --env-file-if-exists=.env harness/bench.ts",
+		"typecheck": "tsc --noEmit"
+	},
+	"dependencies": {
+		"marked": "^18.1.2",
+		"next": "^16.4.3",
+		"react": "^19.3.1",
+		"react-dom": "^19.3.1"
+	},
+	"devDependencies": {
+		"@types/node": "^24.19.2",
+		"@types/react": "^19.3.0",
+		"@types/react-dom": "^19.3.0",
+		"typescript": "^5.9.3"
+	}
+}

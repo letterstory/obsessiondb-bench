@@ -1,0 +1,247 @@
+:root {
+	--fg: #1a1a1a;
+	--bg: #ffffff;
+	--muted: #666666;
+	--border: #e5e5e5;
+	--soft: #f6f6f6;
+	--accent: #ee724a;
+	--ok: #1f8a4c;
+	--skipped: #8a6d00;
+	--failed: #b42318;
+	color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		--fg: #f2f2f2;
+		--bg: #161616;
+		--muted: #a3a3a3;
+		--border: #2e2e2e;
+		--soft: #222222;
+		--ok: #4ade80;
+		--skipped: #facc15;
+		--failed: #f87171;
+	}
+}
+
+* {
+	box-sizing: border-box;
+}
+
+body {
+	margin: 0;
+	background: var(--bg);
+	color: var(--fg);
+	font: 16px/1.6 ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+a {
+	color: inherit;
+	text-decoration-color: var(--accent);
+	text-underline-offset: 3px;
+}
+
+code,
+pre {
+	font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+	font-size: 0.9em;
+}
+
+pre {
+	background: var(--soft);
+	padding: 0.75rem 1rem;
+	overflow-x: auto;
+	border-radius: 6px;
+}
+
+.wrap {
+	max-width: 72rem;
+	margin: 0 auto;
+	padding: 0 1.25rem;
+}
+
+.site-header {
+	border-bottom: 1px solid var(--border);
+}
+
+.site-header .wrap {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5rem 1.5rem;
+	align-items: center;
+	justify-content: space-between;
+	padding-top: 1rem;
+	padding-bottom: 1rem;
+}
+
+.brand {
+	font-weight: 700;
+	text-decoration: none;
+}
+
+nav {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 1rem;
+}
+
+nav a {
+	text-decoration: none;
+	color: var(--muted);
+}
+
+nav a:hover {
+	color: var(--fg);
+}
+
+main {
+	padding-top: 2rem;
+	padding-bottom: 3rem;
+}
+
+h1 {
+	font-size: 2.25rem;
+	line-height: 1.2;
+	margin: 0 0 0.5rem;
+}
+
+h2 {
+	margin-top: 2.5rem;
+}
+
+.lede {
+	font-size: 1.2rem;
+	color: var(--muted);
+	max-width: 46rem;
+}
+
+.muted,
+.run-meta {
+	color: var(--muted);
+}
+
+.summary {
+	font-size: 1.1rem;
+	border-left: 3px solid var(--accent);
+	padding-left: 0.75rem;
+}
+
+.table-scroll {
+	overflow-x: auto;
+	margin: 1rem 0;
+}
+
+table {
+	border-collapse: collapse;
+	width: 100%;
+	font-size: 0.95rem;
+}
+
+th,
+td {
+	text-align: left;
+	padding: 0.5rem 0.75rem;
+	border-bottom: 1px solid var(--border);
+	vertical-align: top;
+}
+
+thead th {
+	font-weight: 600;
+	font-size: 0.85rem;
+}
+
+.num {
+	text-align: right;
+	font-variant-numeric: tabular-nums;
+	white-space: nowrap;
+}
+
+thead .num {
+	white-space: normal;
+}
+
+.primary {
+	background: var(--soft);
+}
+
+.dir {
+	display: block;
+	font-weight: 400;
+	color: var(--muted);
+	font-size: 0.75rem;
+}
+
+.status {
+	font-size: 0.8rem;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.03em;
+}
+
+.status-ok {
+	color: var(--ok);
+}
+
+.status-skipped {
+	color: var(--skipped);
+}
+
+.status-failed {
+	color: var(--failed);
+}
+
+.notes {
+	color: var(--muted);
+	font-size: 0.95rem;
+}
+
+.environment {
+	margin: 1rem 0;
+}
+
+.environment summary {
+	cursor: pointer;
+	font-weight: 600;
+}
+
+.environment dl {
+	display: grid;
+	gap: 0.25rem;
+	font-size: 0.9rem;
+}
+
+.environment dl div {
+	display: grid;
+	grid-template-columns: minmax(10rem, 16rem) 1fr;
+	gap: 1rem;
+}
+
+.environment dt {
+	font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+	color: var(--muted);
+}
+
+.environment dd {
+	margin: 0;
+	overflow-wrap: anywhere;
+}
+
+.run {
+	border-top: 1px solid var(--border);
+	margin-top: 2rem;
+}
+
+.prose {
+	max-width: 46rem;
+}
+
+.prose table {
+	margin: 1rem 0;
+}
+
+.site-footer {
+	border-top: 1px solid var(--border);
+	color: var(--muted);
+	font-size: 0.9rem;
+	padding: 1.5rem 0;
+}

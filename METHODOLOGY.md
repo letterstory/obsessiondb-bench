@@ -27,10 +27,6 @@
 - A contender whose credentials are missing is recorded as skipped with the reason.
 - Results are only what the harness wrote in `results/latest.json`, committed after the run. Nothing is edited by hand.
 
-## Disclosure
-
-This benchmark was built by Letter (The Letter Company) for ObsessionDB, a Letter customer. The code, data source and raw results are in the repo, so anyone can rerun it against their own accounts and check the numbers.
-
 ## Concurrency and memory
 
 The concurrent scenario uses 4 clients so the 8 GB instance stays inside its memory limit. A query that still runs out of memory is recorded as failed for that contender, counted in the results and named on the site. If server-side times are missing for some queries, only the metrics from the affected scenario fall back or are left out, and the note says which.

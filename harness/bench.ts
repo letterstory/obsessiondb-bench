@@ -8,7 +8,7 @@ import path from "node:path";
 import { performance } from "node:perf_hooks";
 import { setTimeout as sleep } from "node:timers/promises";
 import { connect, query, QueryError, redact, type Connection } from "./clickhouse.ts";
-import { percentile, round, shuffled, sum } from "./stats.ts";
+import { geomean, percentile, round, shuffled, sum } from "./stats.ts";
 
 type Bench = {
 	slug: string;
@@ -61,6 +61,9 @@ const queryTimeoutMs = setup.query_timeout_seconds * 1000;
 const loadTimeoutMs = setup.load_timeout_seconds * 1000;
 const { clients, rounds, seed } = setup.concurrent;
 const database = setup.database;
+// system.query_log reports whole milliseconds, so a sub-millisecond median can read 0; the
+// geometric mean counts it as 1 ms.
+const GEOMEAN_FLOOR_MS = 1;
 const querySettings = { use_query_cache: 0, max_execution_time: setup.query_timeout_seconds, log_queries: 1 };
 
 const ranAt = new Date();
@@ -305,6 +308,7 @@ async function runContender(c: Contender, clickbench: { create: string; queries:
 	log(`${c.name}: ${clients} concurrent clients x ${rounds} rounds`);
 	const concurrentRuns: Run[] = [];
 	const concurrentErrors: string[] = [];
+	const concurrentFailedQueries = new Map<number, number>();
 	const indices = clickbench.queries.map((_, i) => i);
 	await Promise.all(
 		Array.from({ length: clients }, async (_, k) => {
@@ -314,6 +318,7 @@ async function runContender(c: Contender, clickbench: { create: string; queries:
 						concurrentRuns.push(await runQuery(conn, clickbench.queries[i], `obsessionbench-${runId}-${q}-conc-c${k + 1}-r${r}-q${i + 1}`));
 					} catch (error) {
 						concurrentErrors.push(`Q${i + 1}: ${errorMessage(error)}`);
+						concurrentFailedQueries.set(i + 1, (concurrentFailedQueries.get(i + 1) ?? 0) + 1);
 					}
 				}
 			}
@@ -324,19 +329,44 @@ async function runContender(c: Contender, clickbench: { create: string; queries:
 	log(`${c.name}: reading server-side times from system.query_log`);
 	const warmIds = warmOk.flatMap((o) => o.runs.map((r) => r.queryId));
 	const lookup = await serverTimes(conn, [...warmIds, ...concurrentRuns.map((r) => r.queryId), insertId]);
-	if (lookup.error) notes.push(`Server-side times unavailable (${lookup.error}), so the latency metrics are null; end-to-end times are in details.`);
 	const server = (id: string) => lookup.times.get(id);
-	const warmServerComplete = warmIds.every((id) => server(id) !== undefined);
-	const concurrentServerComplete = concurrentRuns.length > 0 && concurrentRuns.every((r) => server(r.queryId) !== undefined);
+	const warmServerFound = warmIds.filter((id) => server(id) !== undefined).length;
+	const concurrentServerFound = concurrentRuns.filter((r) => server(r.queryId) !== undefined).length;
+	const warmServerComplete = warmServerFound === warmIds.length;
+	const concurrentServerComplete = concurrentRuns.length > 0 && concurrentServerFound === concurrentRuns.length;
+	// Only the metrics of the scenario whose server-side times are missing are left out.
+	if (lookup.error) {
+		if (!warmServerComplete) {
+			notes.push(
+				`Server-side times missing for the clickbench_warm scenario (${warmServerFound} of ${warmIds.length} found; ${lookup.error}), so geomean_query_ms, suite_seconds, p50_latency_ms, p99_latency_ms and cost_per_1k_queries_usd are null; end-to-end times are in details.`,
+			);
+		}
+		if (concurrentRuns.length > 0 && !concurrentServerComplete) {
+			notes.push(
+				`Server-side times missing for the concurrent scenario (${concurrentServerFound} of ${concurrentRuns.length} found; ${lookup.error}), so concurrent_p99_ms is null; the end-to-end p99 is in details.`,
+			);
+		}
+		if (warmServerComplete && (concurrentRuns.length === 0 || concurrentServerComplete)) {
+			notes.push(`Server-side time for the load's insert is missing (${lookup.error}); load_rows_per_sec is timed at the client and is not affected.`);
+		}
+	}
 
 	const warmServer = warmIds.map((id) => server(id)).filter((v): v is number => v !== undefined);
 	const warmE2e = warmOk.flatMap((o) => o.runs.map((r) => r.e2eMs));
 	const medianOf = (values: number[]) => percentile(values, 50) as number;
 	const failedQueries = warm.filter((o) => o.error).map((o) => `Q${o.query}`);
 	if (failedQueries.length) {
-		notes.push(`${failedQueries.length} of ${warm.length} queries failed (${failedQueries.join(", ")}) and are left out of the latency metrics; suite time is null because the suite did not complete.`);
+		notes.push(
+			`${failedQueries.length} of ${warm.length} queries failed in clickbench_warm (${failedQueries.join(", ")}) and are left out of the latency metrics; geomean_query_ms and suite_seconds are null because the suite did not complete.`,
+		);
 	}
-	if (concurrentErrors.length) notes.push(`${concurrentErrors.length} of ${clients * rounds * indices.length} concurrent queries failed and are left out of concurrent_p99_ms.`);
+	if (concurrentErrors.length) {
+		const named = [...concurrentFailedQueries.entries()]
+			.sort((a, b) => a[0] - b[0])
+			.map(([n, count]) => `Q${n}${count > 1 ? ` x${count}` : ""}`)
+			.join(", ");
+		notes.push(`${concurrentErrors.length} of ${clients * rounds * indices.length} concurrent queries failed (${named}) and are left out of concurrent_p99_ms.`);
+	}
 
 	const suiteComplete = failedQueries.length === 0;
 	const serverMedians = warmOk.map((o) => medianOf(o.runs.map((r) => server(r.queryId) ?? NaN)));
@@ -354,6 +384,7 @@ async function runContender(c: Contender, clickbench: { create: string; queries:
 	const set = (key: string, v: number | null) => {
 		if (key in metrics) metrics[key] = v;
 	};
+	set("geomean_query_ms", warmServerComplete && suiteComplete ? round(geomean(serverMedians.map((ms) => Math.max(ms, GEOMEAN_FLOOR_MS))), 1) : null);
 	set("p99_latency_ms", warmServerComplete ? round(percentile(warmServer, 99), 1) : null);
 	set("p50_latency_ms", warmServerComplete ? round(percentile(warmServer, 50), 1) : null);
 	set("suite_seconds", warmServerComplete && suiteComplete ? round(sum(serverMedians) / 1000, 3) : null);
@@ -376,6 +407,7 @@ async function runContender(c: Contender, clickbench: { create: string; queries:
 			server_insert_ms: server(insertId) ?? null,
 		},
 		end_to_end: {
+			geomean_query_ms: suiteComplete ? round(geomean(e2eMedians.map((ms) => Math.max(ms, GEOMEAN_FLOOR_MS))), 1) : null,
 			p99_latency_ms: round(percentile(warmE2e, 99), 1),
 			p50_latency_ms: round(percentile(warmE2e, 50), 1),
 			suite_seconds: suiteComplete ? round(sum(e2eMedians) / 1000, 3) : null,
@@ -394,6 +426,7 @@ async function runContender(c: Contender, clickbench: { create: string; queries:
 			seed,
 			queries_ok: concurrentRuns.length,
 			queries_failed: concurrentErrors.length,
+			failed_queries: Object.fromEntries([...concurrentFailedQueries.entries()].sort((a, b) => a[0] - b[0]).map(([n, count]) => [`Q${n}`, count])),
 			errors: concurrentErrors.slice(0, 20),
 		},
 		price: c.price,
@@ -416,7 +449,7 @@ function summarize(results: ContenderResult[], rows: number | null): string {
 		.filter((r) => r.status === "ok" && r.metrics[primary.key] !== null)
 		.sort((a, b) => ((a.metrics[primary.key] as number) - (b.metrics[primary.key] as number)) * (primary.better === "lower" ? 1 : -1));
 	const others = results.filter((r) => !measured.includes(r));
-	const othersText = others.map((r) => `${r.name} ${r.status === "ok" ? "had no server-side times" : r.status}`).join(", ");
+	const othersText = others.map((r) => `${r.name} ${r.status === "ok" ? `ran but has no ${primary.key} (see notes)` : r.status}`).join(", ");
 	if (measured.length === 0) {
 		return `No contender was measured in this run (${othersText}); each contender's notes say why.`;
 	}
@@ -457,6 +490,7 @@ async function main() {
 		repetitions: `BENCH_REPETITIONS=${repetitions}`,
 		query_timeout: `${setup.query_timeout_seconds} s`,
 		concurrency: `${clients} clients x ${rounds} rounds, seed ${seed}`,
+		geomean: `geomean_query_ms is the geometric mean of the 43 per-query median server times (medians under ${GEOMEAN_FLOOR_MS} ms count as ${GEOMEAN_FLOOR_MS} ms)`,
 		query_settings: Object.entries(querySettings).map(([k, v]) => `${k}=${v}`).join(", "),
 		client: "ClickHouse HTTP interface over HTTPS, node:https with keep-alive, wait_end_of_query=1",
 	};

@@ -60,7 +60,7 @@ export function ContenderNotes({ results }: { results: Results }) {
 }
 
 export function EndToEnd({ results }: { results: Results }) {
-	const keys = ["p99_latency_ms", "p50_latency_ms", "suite_seconds", "concurrent_p99_ms"];
+	const keys = ["geomean_query_ms", "p99_latency_ms", "p50_latency_ms", "suite_seconds", "concurrent_p99_ms"];
 	const metrics = bench.metrics.filter((m) => keys.includes(m.key));
 	const measured = results.contenders.filter((c) => c.details?.end_to_end);
 	if (measured.length === 0) return null;
@@ -94,6 +94,25 @@ export function EndToEnd({ results }: { results: Results }) {
 					</tbody>
 				</table>
 			</div>
+		</>
+	);
+}
+
+export function Instances({ results }: { results: Results }) {
+	const sized = results.contenders.filter((c) => results.environment[`${c.id}_instance`]);
+	if (sized.length === 0) return null;
+	return (
+		<>
+			<h3>Instance sizes</h3>
+			<p className="muted">The instances differ in size; the <a href="/methodology">methodology</a> says how and which work each one favours.</p>
+			<ul className="notes">
+				{sized.map((c) => (
+					<li key={c.id}>
+						<strong>{c.name}:</strong> {results.environment[`${c.id}_instance`]}
+						{results.environment[`${c.id}_region`] ? `, ${results.environment[`${c.id}_region`].replace(/ \(as set up.*\)$/, "")}` : ""}
+					</li>
+				))}
+			</ul>
 		</>
 	);
 }

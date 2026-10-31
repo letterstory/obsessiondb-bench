@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ContenderNotes, EndToEnd, Environment, JsonLd, Leaderboard } from "@/components/Leaderboard";
+import { ContenderNotes, EndToEnd, Environment, Instances, JsonLd, Leaderboard } from "@/components/Leaderboard";
 import { bench, datasetJsonLd, formatDate, latest, primaryMetric } from "@/lib/bench";
 
 const description = `${bench.tagline} The leaderboard from the latest run, ranked on ${primaryMetric.label.toLowerCase()}.`;
@@ -32,6 +32,7 @@ export default function Home() {
 						<p className="summary">{results.summary}</p>
 						<Leaderboard results={results} />
 						<ContenderNotes results={results} />
+						<Instances results={results} />
 						<EndToEnd results={results} />
 						<Environment results={results} />
 					</>

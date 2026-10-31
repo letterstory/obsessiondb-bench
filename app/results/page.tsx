@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { ContenderNotes, EndToEnd, Environment, JsonLd, Leaderboard } from "@/components/Leaderboard";
+import { ContenderNotes, EndToEnd, Environment, Instances, JsonLd, Leaderboard } from "@/components/Leaderboard";
 import { bench, datasetJsonLd, formatDate, history, latest } from "@/lib/bench";
 
 const description = `Every ${bench.name} run, newest first: ObsessionDB and ClickHouse Cloud on ClickBench, with each run's environment and raw numbers.`;
@@ -34,6 +34,7 @@ export default function ResultsPage() {
 						<p className="summary">{results.summary}</p>
 						<Leaderboard results={results} />
 						<ContenderNotes results={results} />
+						<Instances results={results} />
 						<EndToEnd results={results} />
 						<Environment results={results} />
 					</section>

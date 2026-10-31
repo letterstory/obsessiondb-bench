@@ -35,10 +35,6 @@ npm run bench
 
 The results land in `results/latest.json`, in the shape [results/README.md](results/README.md) describes.
 
-## Disclosure
-
-This benchmark is maintained by Letter for ObsessionDB, one of the products it measures. The method, the harness and every result are in this repository, so anyone who can read it can run it again and check the numbers. The repository is private, so the benchmark is not publicly verifiable yet.
-
 ## License
 
 MIT. See [LICENSE](LICENSE).

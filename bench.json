@@ -1,0 +1,93 @@
+{
+	"version": 1,
+	"slug": "obsessionbench",
+	"name": "ObsessionBench",
+	"tagline": "ObsessionDB vs ClickHouse Cloud on ClickBench: latency, consistency and cost, measured in the open.",
+	"site": "https://obsessionbench.com",
+	"repo": null,
+	"license": "MIT",
+	"subject": {
+		"id": "subject",
+		"name": "ObsessionDB",
+		"url": "https://obsessiondb.com"
+	},
+	"competitors": [
+		{
+			"id": "clickhouse-cloud",
+			"name": "ClickHouse Cloud",
+			"url": "https://clickhouse.com/cloud",
+			"env": [
+				"CLICKHOUSE_CLOUD_HOST",
+				"CLICKHOUSE_CLOUD_PORT",
+				"CLICKHOUSE_CLOUD_USER",
+				"CLICKHOUSE_CLOUD_PASSWORD"
+			]
+		}
+	],
+	"metrics": [
+		{
+			"key": "p99_latency_ms",
+			"label": "p99 query latency",
+			"unit": "ms",
+			"better": "lower",
+			"primary": true
+		},
+		{
+			"key": "p50_latency_ms",
+			"label": "Median query latency",
+			"unit": "ms",
+			"better": "lower",
+			"primary": false
+		},
+		{
+			"key": "suite_seconds",
+			"label": "Full ClickBench suite time",
+			"unit": "s",
+			"better": "lower",
+			"primary": false
+		},
+		{
+			"key": "concurrent_p99_ms",
+			"label": "p99 latency with 8 concurrent clients",
+			"unit": "ms",
+			"better": "lower",
+			"primary": false
+		},
+		{
+			"key": "load_rows_per_sec",
+			"label": "Data load speed",
+			"unit": "rows/s",
+			"better": "higher",
+			"primary": false
+		},
+		{
+			"key": "cost_per_1k_queries_usd",
+			"label": "Cost per 1,000 queries (list price)",
+			"unit": "USD",
+			"better": "lower",
+			"primary": false
+		}
+	],
+	"scenarios": [
+		{
+			"key": "load",
+			"label": "Data load",
+			"description": "Create the standard ClickBench `hits` table and load the same 10 million rows (the first 10 partitioned ClickBench parquet files) into each service. The load runs server-side from the public dataset URLs, so the sandbox never holds the data. Timed from first insert to the final row count matching."
+		},
+		{
+			"key": "clickbench_warm",
+			"label": "ClickBench, warm",
+			"description": "All 43 ClickBench queries, one client. Each query runs once untimed as a warm-up, then 5 timed runs. Per-query p50 and p99 come from the timed runs; suite time is the sum of per-query medians."
+		},
+		{
+			"key": "concurrent",
+			"label": "Concurrent load",
+			"description": "8 clients each run the 43 queries in a shuffled order (same seed for every contender) for 3 rounds after the warm-up. Reports p99 latency across all queries, to show consistency under load."
+		}
+	],
+	"results": {
+		"latest": "results/latest.json",
+		"history": "results/history/",
+		"version": 1
+	}
+}

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Markdown } from "@/components/Markdown";
+import { bench } from "@/lib/bench";
 
 export const metadata: Metadata = {
 	title: "Methodology",
@@ -8,5 +9,12 @@ export const metadata: Metadata = {
 };
 
 export default function MethodologyPage() {
-	return <Markdown file="METHODOLOGY.md" />;
+	return (
+		<>
+			<Markdown file="METHODOLOGY.md" />
+			<p>
+				Method and code: <a href={bench.repo}>{bench.repo}</a>
+			</p>
+		</>
+	);
 }

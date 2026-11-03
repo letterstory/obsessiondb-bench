@@ -16,6 +16,7 @@ export type BenchConfig = {
 	name: string;
 	tagline: string;
 	site: string;
+	repo: string;
 	license: string;
 	subject: { id: string; name: string; url: string };
 	competitors: { id: string; name: string; url: string; env: string[] }[];

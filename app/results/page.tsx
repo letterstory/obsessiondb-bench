@@ -20,6 +20,9 @@ export default function ResultsPage() {
 				Every run the harness wrote to <code>results/history/</code>, newest first. The latest run as raw JSON:{" "}
 				<a href="/results/latest.json">results/latest.json</a>.
 			</p>
+			<p>
+				Method and code: <a href={bench.repo}>{bench.repo}</a>
+			</p>
 			{runs.length === 0 ? (
 				<p>No run has been published yet.</p>
 			) : (

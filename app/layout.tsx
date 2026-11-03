@@ -37,6 +37,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 							<Link href="/results">Results</Link>
 							<Link href="/methodology">Methodology</Link>
 							<Link href="/replicate">Replicate</Link>
+							<a href={bench.repo}>Code on GitHub</a>
 						</nav>
 					</div>
 				</header>
@@ -44,7 +45,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 				<footer className="site-footer">
 					<div className="wrap">
 						<p>
-							<a href="/results/latest.json">results/latest.json</a> · <a href="/llms.txt">llms.txt</a> · {bench.license} license
+							<a href="/results/latest.json">results/latest.json</a> · <a href="/llms.txt">llms.txt</a> · <a href={bench.repo}>Code on GitHub</a> · {bench.license} license
 						</p>
 					</div>
 				</footer>

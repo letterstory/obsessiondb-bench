@@ -1,0 +1,1759 @@
+{
+	"version": 1,
+	"bench": "obsessionbench",
+	"ran_at": "2026-11-03T19:10:59Z",
+	"environment": {
+		"runner": "Linux 6.1.188-maritime1 x64, 2 x AMD EPYC, 8 GB RAM",
+		"node": "v24.22.1",
+		"harness_commit": "1e5674d4dbadbec5f19baa9fb56ae5da879e3cd0",
+		"clickbench": "https://github.com/ClickHouse/ClickBench @ 0cb36ab1a62c445414828aae1c9dccacb71af37b (clickhouse-cloud/create.sql, clickhouse-cloud/queries.sql)",
+		"scale": "BENCH_SCALE=10: 10 of 100 ClickBench partitioned parquet files (https://datasets.clickhouse.com/hits_compatible/athena_partitioned/hits_{0..9}.parquet)",
+		"repetitions": "BENCH_REPETITIONS=5",
+		"query_timeout": "60 s",
+		"concurrency": "4 clients x 3 rounds, seed 20261031",
+		"geomean": "geomean_query_ms is the geometric mean of the 43 per-query median server times (medians under 1 ms count as 1 ms)",
+		"query_settings": "use_query_cache=0, max_execution_time=60, log_queries=1",
+		"client": "ClickHouse HTTP interface over HTTPS, node:https with keep-alive, wait_end_of_query=1",
+		"subject_version": "26.8.2.1",
+		"subject_region": "eu-central (as set up for the run; see METHODOLOGY.md)",
+		"subject_instance": "Free developer tier, single node, 4 vCPU / 8 GB RAM",
+		"subject_price": "$0.438356/hour, Nearest paid ObsessionDB equivalent of the free 4 vCPU / 8 GB instance: one 16 GB node (2 compute units, 4 vCPU), the smallest paid size with at least 4 vCPU and 8 GB, at the listed $20 per GB of memory per node per month = $320/month, divided by 730 hours a month (the free tier is not used as the price), read 2026-10-31 from https://obsessiondb.com/pricing",
+		"clickhouse-cloud_version": "26.6.1.2455",
+		"clickhouse-cloud_region": "AWS eu-central-1 (as set up for the run; see METHODOLOGY.md)",
+		"clickhouse-cloud_instance": "1 replica, fixed 12 GiB / 3 vCPU (autoscaling off: min = max)",
+		"clickhouse-cloud_price": "$0.39375/hour, ClickHouse Cloud Basic plan (its 1-replica 12 GiB / 3 vCPU size) in AWS eu-central-1: $0.2625 per compute-unit-hour (1 unit = 8 GiB / 2 vCPU) x 1.5 units, read 2026-10-31 from https://clickhouse.com/pricing"
+	},
+	"summary": "Typical query time (geometric mean) (server-side, lower is better) on the 43 ClickBench queries over 10,000,000 rows, 5 warm runs each: ObsessionDB 67.4 ms, ClickHouse Cloud 90.2 ms.",
+	"contenders": [
+		{
+			"id": "subject",
+			"name": "ObsessionDB",
+			"status": "ok",
+			"metrics": {
+				"geomean_query_ms": 67.4,
+				"suite_seconds": 10.257,
+				"p50_latency_ms": 71,
+				"p99_latency_ms": 2738.2,
+				"concurrent_p99_ms": 12094.1,
+				"load_rows_per_sec": 87559,
+				"cost_per_1k_queries_usd": 0.029394
+			},
+			"notes": null,
+			"details": {
+				"version": "26.8.2.1",
+				"load": {
+					"rows": 10000000,
+					"seconds": 114.209,
+					"files": 10,
+					"server_insert_ms": 114135
+				},
+				"end_to_end": {
+					"geomean_query_ms": 139.2,
+					"p99_latency_ms": 2776.4,
+					"p50_latency_ms": 110.4,
+					"suite_seconds": 11.872,
+					"concurrent_p99_ms": 12161.2
+				},
+				"clickbench_warm": [
+					{
+						"query": 1,
+						"status": "ok",
+						"error": null,
+						"server_ms": [
+							1,
+							3,
+							1,
+							1,
+							3
+						],
+						"end_to_end_ms": [
+							40.5,
+							42,
+							39.4,
+							39.7,
+							41.8
+						]
+					},
+					{
+						"query": 2,
+						"status": "ok",
+						"error": null,
+						"server_ms": [
+							7,
+							11,
+							7,
+							7,
+							9
+						],
+						"end_to_end_ms": [
+							44.8,
+							49.4,
+							45,
+							45.4,
+							47.3
+						]
+					},
+					{
+						"query": 3,
+						"status": "ok",
+						"error": null,
+						"server_ms": [
+							11,
+							9,
+							9,
+							11,
+							12
+						],
+						"end_to_end_ms": [
+							49.4,
+							47.6,
+							47.1,
+							49.9,
+							50.8
+						]
+					},
+					{
+						"query": 4,
+						"status": "ok",
+						"error": null,
+						"server_ms": [
+							16,
+							12,
+							11,
+							12,
+							11
+						],
+						"end_to_end_ms": [
+							54.3,
+							50.4,
+							49.1,
+							50.4,
+							49.4
+						]
+					},
+					{
+						"query": 5,
+						"status": "ok",
+						"error": null,
+						"server_ms": [
+							75,
+							67,
+							61,
+							63,
+							60
+						],
+						"end_to_end_ms": [
+							113.4,
+							104.9,
+							98.9,
+							100.7,
+							98.8
+						]
+					},
+					{
+						"query": 6,
+						"status": "ok",
+						"error": null,
+						"server_ms": [
+							158,
+							87,
+							142,
+							122,
+							104
+						],
+						"end_to_end_ms": [
+							195.6,
+							125.3,
+							180.2,
+							160.8,
+							142.5
+						]
+					},
+					{
+						"query": 7,
+						"status": "ok",
+						"error": null,
+						"server_ms": [
+							6,
+							6,
+							8,
+							6,
+							6
+						],
+						"end_to_end_ms": [
+							44.6,
+							44.3,
+							47.9,
+							44.2,
+							44.8
+						]
+					},
+					{
+						"query": 8,
+						"status": "ok",
+						"error": null,
+						"server_ms": [
+							8,
+							8,
+							10,
+							9,
+							8
+						],
+						"end_to_end_ms": [
+							46.6,
+							46.1,
+							48.5,
+							47.7,
+							46
+						]
+					},
+					{
+						"query": 9,
+						"status": "ok",
+						"error": null,
+						"server_ms": [
+							78,
+							82,
+							118,
+							80,
+							81
+						],
+						"end_to_end_ms": [
+							115.7,
+							119.7,
+							156.3,
+							117.8,
+							118.4
+						]
+					},
+					{
+						"query": 10,
+						"status": "ok",
+						"error": null,
+						"server_ms": [
+							91,
+							135,
+							90,
+							137,
+							132
+						],
+						"end_to_end_ms": [
+							129.8,
+							174.6,
+							128.1,
+							175.8,
+							170
+						]
+					},
+					{
+						"query": 11,
+						"status": "ok",
+						"error": null,
+						"server_ms": [
+							21,
+							49,
+							56,
+							24,
+							21
+						],
+						"end_to_end_ms": [
+							59.7,
+							87.7,
+							95.7,
+							62.2,
+							58.9
+						]
+					},
+					{
+						"query": 12,
+						"status": "ok",
+						"error": null,
+						"server_ms": [
+							61,
+							63,
+							65,
+							54,
+							26
+						],
+						"end_to_end_ms": [
+							99.3,
+							101,
+							103.5,
+							92.7,
+							64.4
+						]
+					},
+					{
+						"query": 13,
+						"status": "ok",
+						"error": null,
+						"server_ms": [
+							176,
+							180,
+							167,
+							179,
+							151
+						],
+						"end_to_end_ms": [
+							214.5,
+							218.5,
+							205.1,
+							217.1,
+							189
+						]
+					},
+					{
+						"query": 14,
+						"status": "ok",
+						"error": null,
+						"server_ms": [
+							230,
+							194,
+							219,
+							227,
+							215
+						],
+						"end_to_end_ms": [
+							268.4,
+							231.6,
+							257.7,
+							265.1,
+							253.3
+						]
+					},
+					{
+						"query": 15,
+						"status": "ok",
+						"error": null,
+						"server_ms": [
+							181,
+							168,
+							233,
+							243,
+							211
+						],
+						"end_to_end_ms": [
+							218.7,
+							206.3,
+							271,
+							281.5,
+							248.6
+						]
+					},
+					{
+						"query": 16,
+						"status": "ok",
+						"error": null,
+						"server_ms": [
+							97,
+							99,
+							96,
+							94,
+							122
+						],
+						"end_to_end_ms": [
+							135.3,
+							136.8,
+							133.8,
+							132.4,
+							160
+						]
+					},
+					{
+						"query": 17,
+						"status": "ok",
+						"error": null,
+						"server_ms": [
+							416,
+							342,
+							397,
+							359,
+							412
+						],
+						"end_to_end_ms": [
+							454.4,
+							380.9,
+							434.6,
+							396.8,
+							450.5
+						]
+					},
+					{
+						"query": 18,
+						"status": "ok",
+						"error": null,
+						"server_ms": [
+							400,
+							353,
+							348,
+							357,
+							337
+						],
+						"end_to_end_ms": [
+							436.3,
+							389.6,
+							384.5,
+							393.6,
+							373.4
+						]
+					},
+					{
+						"query": 19,
+						"status": "ok",
+						"error": null,
+						"server_ms": [
+							671,
+							1072,
+							1281,
+							751,
+							832
+						],
+						"end_to_end_ms": [
+							709,
+							1088.7,
+							1303.7,
+							789.1,
+							869.9
+						]
+					},
+					{
+						"query": 20,
+						"status": "ok",
+						"error": null,
+						"server_ms": [
+							1,
+							1,
+							4,
+							2,
+							2
+						],
+						"end_to_end_ms": [
+							39.9,
+							40.1,
+							43.2,
+							40.4,
+							40.1
+						]
+					},
+					{
+						"query": 21,
+						"status": "ok",
+						"error": null,
+						"server_ms": [
+							61,
+							67,
+							65,
+							64,
+							139
+						],
+						"end_to_end_ms": [
+							99.6,
+							105.6,
+							103.7,
+							102.6,
+							177.6
+						]
+					},
+					{
+						"query": 22,
+						"status": "ok",
+						"error": null,
+						"server_ms": [
+							35,
+							16,
+							16,
+							14,
+							17
+						],
+						"end_to_end_ms": [
+							73.3,
+							54.5,
+							55.1,
+							53,
+							55.9
+						]
+					},
+					{
+						"query": 23,
+						"status": "ok",
+						"error": null,
+						"server_ms": [
+							271,
+							374,
+							344,
+							355,
+							344
+						],
+						"end_to_end_ms": [
+							309.6,
+							412.1,
+							382.8,
+							392.7,
+							382.1
+						]
+					},
+					{
+						"query": 24,
+						"status": "ok",
+						"error": null,
+						"server_ms": [
+							250,
+							255,
+							251,
+							182,
+							254
+						],
+						"end_to_end_ms": [
+							287.6,
+							292.6,
+							289.2,
+							220.4,
+							291.3
+						]
+					},
+					{
+						"query": 25,
+						"status": "ok",
+						"error": null,
+						"server_ms": [
+							66,
+							145,
+							70,
+							65,
+							67
+						],
+						"end_to_end_ms": [
+							104.5,
+							183.1,
+							107.5,
+							102.9,
+							105.6
+						]
+					},
+					{
+						"query": 26,
+						"status": "ok",
+						"error": null,
+						"server_ms": [
+							58,
+							51,
+							58,
+							32,
+							28
+						],
+						"end_to_end_ms": [
+							97,
+							89.6,
+							95.7,
+							70.5,
+							66.3
+						]
+					},
+					{
+						"query": 27,
+						"status": "ok",
+						"error": null,
+						"server_ms": [
+							147,
+							62,
+							59,
+							73,
+							68
+						],
+						"end_to_end_ms": [
+							185,
+							100.5,
+							96.8,
+							111.4,
+							105.8
+						]
+					},
+					{
+						"query": 28,
+						"status": "ok",
+						"error": null,
+						"server_ms": [
+							71,
+							64,
+							144,
+							69,
+							72
+						],
+						"end_to_end_ms": [
+							114.5,
+							102.1,
+							182.1,
+							107.2,
+							110.4
+						]
+					},
+					{
+						"query": 29,
+						"status": "ok",
+						"error": null,
+						"server_ms": [
+							2959,
+							2892,
+							2713,
+							2742,
+							2715
+						],
+						"end_to_end_ms": [
+							2997.5,
+							2930,
+							2751.7,
+							2780.3,
+							2753
+						]
+					},
+					{
+						"query": 30,
+						"status": "ok",
+						"error": null,
+						"server_ms": [
+							21,
+							21,
+							19,
+							21,
+							19
+						],
+						"end_to_end_ms": [
+							59.7,
+							58.7,
+							57.2,
+							59.3,
+							57.3
+						]
+					},
+					{
+						"query": 31,
+						"status": "ok",
+						"error": null,
+						"server_ms": [
+							148,
+							154,
+							153,
+							85,
+							150
+						],
+						"end_to_end_ms": [
+							186.1,
+							192,
+							190.6,
+							123,
+							187.9
+						]
+					},
+					{
+						"query": 32,
+						"status": "ok",
+						"error": null,
+						"server_ms": [
+							180,
+							157,
+							179,
+							168,
+							235
+						],
+						"end_to_end_ms": [
+							218,
+							195.5,
+							217.6,
+							206.3,
+							273.5
+						]
+					},
+					{
+						"query": 33,
+						"status": "ok",
+						"error": null,
+						"server_ms": [
+							1516,
+							1393,
+							1386,
+							1501,
+							1503
+						],
+						"end_to_end_ms": [
+							1530.8,
+							1403.5,
+							1399.4,
+							1507.3,
+							1517.5
+						]
+					},
+					{
+						"query": 34,
+						"status": "ok",
+						"error": null,
+						"server_ms": [
+							671,
+							707,
+							646,
+							725,
+							893
+						],
+						"end_to_end_ms": [
+							709.6,
+							745.6,
+							684.1,
+							763.2,
+							931.2
+						]
+					},
+					{
+						"query": 35,
+						"status": "ok",
+						"error": null,
+						"server_ms": [
+							836,
+							729,
+							713,
+							825,
+							859
+						],
+						"end_to_end_ms": [
+							874.2,
+							767.4,
+							751.2,
+							863.1,
+							897.3
+						]
+					},
+					{
+						"query": 36,
+						"status": "ok",
+						"error": null,
+						"server_ms": [
+							90,
+							92,
+							97,
+							88,
+							92
+						],
+						"end_to_end_ms": [
+							128.6,
+							130.4,
+							135.5,
+							125.8,
+							130.9
+						]
+					},
+					{
+						"query": 37,
+						"status": "ok",
+						"error": null,
+						"server_ms": [
+							71,
+							64,
+							62,
+							71,
+							68
+						],
+						"end_to_end_ms": [
+							109.3,
+							101.8,
+							100.5,
+							109.6,
+							106.3
+						]
+					},
+					{
+						"query": 38,
+						"status": "ok",
+						"error": null,
+						"server_ms": [
+							35,
+							39,
+							34,
+							38,
+							36
+						],
+						"end_to_end_ms": [
+							73.5,
+							77.7,
+							72.4,
+							77.2,
+							74.1
+						]
+					},
+					{
+						"query": 39,
+						"status": "ok",
+						"error": null,
+						"server_ms": [
+							26,
+							35,
+							30,
+							30,
+							29
+						],
+						"end_to_end_ms": [
+							64.4,
+							73.3,
+							67.4,
+							68.7,
+							66.9
+						]
+					},
+					{
+						"query": 40,
+						"status": "ok",
+						"error": null,
+						"server_ms": [
+							150,
+							134,
+							115,
+							104,
+							109
+						],
+						"end_to_end_ms": [
+							187.5,
+							172.5,
+							153.6,
+							143,
+							147.8
+						]
+					},
+					{
+						"query": 41,
+						"status": "ok",
+						"error": null,
+						"server_ms": [
+							16,
+							20,
+							17,
+							20,
+							17
+						],
+						"end_to_end_ms": [
+							54.9,
+							58.5,
+							55.8,
+							58.4,
+							54.9
+						]
+					},
+					{
+						"query": 42,
+						"status": "ok",
+						"error": null,
+						"server_ms": [
+							13,
+							15,
+							13,
+							17,
+							14
+						],
+						"end_to_end_ms": [
+							51.5,
+							53.2,
+							51.5,
+							55.5,
+							52.3
+						]
+					},
+					{
+						"query": 43,
+						"status": "ok",
+						"error": null,
+						"server_ms": [
+							11,
+							13,
+							11,
+							13,
+							12
+						],
+						"end_to_end_ms": [
+							49.6,
+							51.7,
+							49.6,
+							51.4,
+							50.8
+						]
+					}
+				],
+				"concurrent": {
+					"clients": 4,
+					"rounds": 3,
+					"seed": 20261031,
+					"queries_ok": 516,
+					"queries_failed": 0,
+					"failed_queries": {},
+					"errors": []
+				},
+				"price": {
+					"usd_per_hour": 0.438356,
+					"basis": "Nearest paid ObsessionDB equivalent of the free 4 vCPU / 8 GB instance: one 16 GB node (2 compute units, 4 vCPU), the smallest paid size with at least 4 vCPU and 8 GB, at the listed $20 per GB of memory per node per month = $320/month, divided by 730 hours a month (the free tier is not used as the price)",
+					"source_url": "https://obsessiondb.com/pricing",
+					"read_on": "2026-10-31"
+				}
+			}
+		},
+		{
+			"id": "clickhouse-cloud",
+			"name": "ClickHouse Cloud",
+			"status": "ok",
+			"metrics": {
+				"geomean_query_ms": 90.2,
+				"suite_seconds": 11.791,
+				"p50_latency_ms": 106,
+				"p99_latency_ms": 4718.7,
+				"concurrent_p99_ms": 15242.2,
+				"load_rows_per_sec": 315102,
+				"cost_per_1k_queries_usd": 0.030873
+			},
+			"notes": null,
+			"details": {
+				"version": "26.6.1.2455",
+				"load": {
+					"rows": 10000000,
+					"seconds": 31.736,
+					"files": 10,
+					"server_insert_ms": 31677
+				},
+				"end_to_end": {
+					"geomean_query_ms": 144.5,
+					"p99_latency_ms": 4749.5,
+					"p50_latency_ms": 135.1,
+					"suite_seconds": 13.068,
+					"concurrent_p99_ms": 15272.1
+				},
+				"clickbench_warm": [
+					{
+						"query": 1,
+						"status": "ok",
+						"error": null,
+						"server_ms": [
+							2,
+							2,
+							2,
+							2,
+							2
+						],
+						"end_to_end_ms": [
+							31.3,
+							31,
+							30.9,
+							31.4,
+							30.7
+						]
+					},
+					{
+						"query": 2,
+						"status": "ok",
+						"error": null,
+						"server_ms": [
+							12,
+							13,
+							18,
+							10,
+							10
+						],
+						"end_to_end_ms": [
+							41.3,
+							42.3,
+							47.8,
+							39.8,
+							39.7
+						]
+					},
+					{
+						"query": 3,
+						"status": "ok",
+						"error": null,
+						"server_ms": [
+							20,
+							20,
+							43,
+							21,
+							21
+						],
+						"end_to_end_ms": [
+							49.1,
+							49.2,
+							72.1,
+							50.3,
+							49.6
+						]
+					},
+					{
+						"query": 4,
+						"status": "ok",
+						"error": null,
+						"server_ms": [
+							31,
+							30,
+							51,
+							31,
+							30
+						],
+						"end_to_end_ms": [
+							60.1,
+							59.2,
+							80.6,
+							59.8,
+							59.3
+						]
+					},
+					{
+						"query": 5,
+						"status": "ok",
+						"error": null,
+						"server_ms": [
+							129,
+							135,
+							119,
+							135,
+							155
+						],
+						"end_to_end_ms": [
+							157.9,
+							163.8,
+							148,
+							164.4,
+							185.2
+						]
+					},
+					{
+						"query": 6,
+						"status": "ok",
+						"error": null,
+						"server_ms": [
+							302,
+							292,
+							251,
+							262,
+							271
+						],
+						"end_to_end_ms": [
+							309.8,
+							302.2,
+							281.3,
+							311.4,
+							300.7
+						]
+					},
+					{
+						"query": 7,
+						"status": "ok",
+						"error": null,
+						"server_ms": [
+							14,
+							20,
+							41,
+							12,
+							14
+						],
+						"end_to_end_ms": [
+							43.7,
+							48.1,
+							69.9,
+							42.1,
+							44.2
+						]
+					},
+					{
+						"query": 8,
+						"status": "ok",
+						"error": null,
+						"server_ms": [
+							17,
+							16,
+							11,
+							12,
+							11
+						],
+						"end_to_end_ms": [
+							45.7,
+							45,
+							40.6,
+							40.7,
+							40.5
+						]
+					},
+					{
+						"query": 9,
+						"status": "ok",
+						"error": null,
+						"server_ms": [
+							124,
+							122,
+							139,
+							129,
+							124
+						],
+						"end_to_end_ms": [
+							153.2,
+							151.7,
+							168.2,
+							157.8,
+							152.7
+						]
+					},
+					{
+						"query": 10,
+						"status": "ok",
+						"error": null,
+						"server_ms": [
+							156,
+							142,
+							144,
+							151,
+							176
+						],
+						"end_to_end_ms": [
+							185.1,
+							171.5,
+							173,
+							180.6,
+							205.2
+						]
+					},
+					{
+						"query": 11,
+						"status": "ok",
+						"error": null,
+						"server_ms": [
+							67,
+							57,
+							59,
+							59,
+							58
+						],
+						"end_to_end_ms": [
+							95.8,
+							86.7,
+							88,
+							87.9,
+							87.3
+						]
+					},
+					{
+						"query": 12,
+						"status": "ok",
+						"error": null,
+						"server_ms": [
+							73,
+							71,
+							68,
+							74,
+							69
+						],
+						"end_to_end_ms": [
+							101.9,
+							100.5,
+							97.6,
+							103.3,
+							98.4
+						]
+					},
+					{
+						"query": 13,
+						"status": "ok",
+						"error": null,
+						"server_ms": [
+							185,
+							179,
+							190,
+							180,
+							183
+						],
+						"end_to_end_ms": [
+							213.8,
+							207.9,
+							219.2,
+							208.6,
+							213
+						]
+					},
+					{
+						"query": 14,
+						"status": "ok",
+						"error": null,
+						"server_ms": [
+							263,
+							259,
+							281,
+							259,
+							259
+						],
+						"end_to_end_ms": [
+							292.2,
+							287.7,
+							310.4,
+							287.6,
+							288.5
+						]
+					},
+					{
+						"query": 15,
+						"status": "ok",
+						"error": null,
+						"server_ms": [
+							186,
+							194,
+							181,
+							193,
+							189
+						],
+						"end_to_end_ms": [
+							215.5,
+							223,
+							210.8,
+							222.4,
+							218
+						]
+					},
+					{
+						"query": 16,
+						"status": "ok",
+						"error": null,
+						"server_ms": [
+							88,
+							95,
+							87,
+							87,
+							86
+						],
+						"end_to_end_ms": [
+							116.9,
+							124.1,
+							115.7,
+							115.8,
+							115.6
+						]
+					},
+					{
+						"query": 17,
+						"status": "ok",
+						"error": null,
+						"server_ms": [
+							311,
+							322,
+							334,
+							309,
+							331
+						],
+						"end_to_end_ms": [
+							345.4,
+							350.7,
+							370.9,
+							343.7,
+							365
+						]
+					},
+					{
+						"query": 18,
+						"status": "ok",
+						"error": null,
+						"server_ms": [
+							221,
+							248,
+							267,
+							248,
+							237
+						],
+						"end_to_end_ms": [
+							252.3,
+							282.8,
+							296.1,
+							276.5,
+							266
+						]
+					},
+					{
+						"query": 19,
+						"status": "ok",
+						"error": null,
+						"server_ms": [
+							606,
+							566,
+							538,
+							590,
+							555
+						],
+						"end_to_end_ms": [
+							635,
+							595.4,
+							566.8,
+							621.8,
+							583.9
+						]
+					},
+					{
+						"query": 20,
+						"status": "ok",
+						"error": null,
+						"server_ms": [
+							2,
+							2,
+							2,
+							2,
+							2
+						],
+						"end_to_end_ms": [
+							32.1,
+							32.1,
+							32.2,
+							33.1,
+							31.8
+						]
+					},
+					{
+						"query": 21,
+						"status": "ok",
+						"error": null,
+						"server_ms": [
+							129,
+							131,
+							129,
+							128,
+							125
+						],
+						"end_to_end_ms": [
+							158.2,
+							160.4,
+							157.8,
+							157.2,
+							154.1
+						]
+					},
+					{
+						"query": 22,
+						"status": "ok",
+						"error": null,
+						"server_ms": [
+							40,
+							37,
+							57,
+							40,
+							40
+						],
+						"end_to_end_ms": [
+							69.5,
+							66.5,
+							86.5,
+							69.1,
+							69
+						]
+					},
+					{
+						"query": 23,
+						"status": "ok",
+						"error": null,
+						"server_ms": [
+							376,
+							368,
+							410,
+							380,
+							404
+						],
+						"end_to_end_ms": [
+							404.8,
+							397.9,
+							438.8,
+							408.7,
+							433.2
+						]
+					},
+					{
+						"query": 24,
+						"status": "ok",
+						"error": null,
+						"server_ms": [
+							343,
+							319,
+							309,
+							292,
+							303
+						],
+						"end_to_end_ms": [
+							372.2,
+							347.7,
+							364.6,
+							347.1,
+							358.6
+						]
+					},
+					{
+						"query": 25,
+						"status": "ok",
+						"error": null,
+						"server_ms": [
+							52,
+							51,
+							52,
+							50,
+							52
+						],
+						"end_to_end_ms": [
+							81.8,
+							80.5,
+							80.9,
+							78.8,
+							80.7
+						]
+					},
+					{
+						"query": 26,
+						"status": "ok",
+						"error": null,
+						"server_ms": [
+							93,
+							108,
+							91,
+							128,
+							106
+						],
+						"end_to_end_ms": [
+							122.5,
+							137.1,
+							120.5,
+							157.4,
+							135.1
+						]
+					},
+					{
+						"query": 27,
+						"status": "ok",
+						"error": null,
+						"server_ms": [
+							62,
+							51,
+							80,
+							51,
+							60
+						],
+						"end_to_end_ms": [
+							90.8,
+							80,
+							109,
+							80.2,
+							89
+						]
+					},
+					{
+						"query": 28,
+						"status": "ok",
+						"error": null,
+						"server_ms": [
+							143,
+							113,
+							127,
+							105,
+							114
+						],
+						"end_to_end_ms": [
+							172.3,
+							142.5,
+							155.9,
+							133.7,
+							142.5
+						]
+					},
+					{
+						"query": 29,
+						"status": "ok",
+						"error": null,
+						"server_ms": [
+							4702,
+							4711,
+							4720,
+							4856,
+							4822
+						],
+						"end_to_end_ms": [
+							4731.1,
+							4740.3,
+							4751,
+							4884.8,
+							4850.7
+						]
+					},
+					{
+						"query": 30,
+						"status": "ok",
+						"error": null,
+						"server_ms": [
+							32,
+							32,
+							1075,
+							34,
+							31
+						],
+						"end_to_end_ms": [
+							60.9,
+							60.2,
+							1104.5,
+							62.5,
+							60.2
+						]
+					},
+					{
+						"query": 31,
+						"status": "ok",
+						"error": null,
+						"server_ms": [
+							169,
+							169,
+							182,
+							163,
+							149
+						],
+						"end_to_end_ms": [
+							197.8,
+							197.9,
+							211.6,
+							191.7,
+							178.3
+						]
+					},
+					{
+						"query": 32,
+						"status": "ok",
+						"error": null,
+						"server_ms": [
+							215,
+							214,
+							182,
+							186,
+							210
+						],
+						"end_to_end_ms": [
+							244.2,
+							243.4,
+							213.6,
+							215.4,
+							238.5
+						]
+					},
+					{
+						"query": 33,
+						"status": "ok",
+						"error": null,
+						"server_ms": [
+							649,
+							832,
+							731,
+							689,
+							689
+						],
+						"end_to_end_ms": [
+							679.2,
+							861.1,
+							760.3,
+							718.3,
+							718.7
+						]
+					},
+					{
+						"query": 34,
+						"status": "ok",
+						"error": null,
+						"server_ms": [
+							812,
+							836,
+							892,
+							815,
+							792
+						],
+						"end_to_end_ms": [
+							841.5,
+							865.2,
+							921.9,
+							844.4,
+							821.2
+						]
+					},
+					{
+						"query": 35,
+						"status": "ok",
+						"error": null,
+						"server_ms": [
+							721,
+							737,
+							710,
+							723,
+							710
+						],
+						"end_to_end_ms": [
+							749.8,
+							766.6,
+							740.9,
+							752,
+							739.1
+						]
+					},
+					{
+						"query": 36,
+						"status": "ok",
+						"error": null,
+						"server_ms": [
+							89,
+							66,
+							68,
+							68,
+							71
+						],
+						"end_to_end_ms": [
+							117.9,
+							95.3,
+							97.3,
+							97.3,
+							100.5
+						]
+					},
+					{
+						"query": 37,
+						"status": "ok",
+						"error": null,
+						"server_ms": [
+							80,
+							83,
+							81,
+							81,
+							92
+						],
+						"end_to_end_ms": [
+							109,
+							112.2,
+							110.4,
+							110.8,
+							120.6
+						]
+					},
+					{
+						"query": 38,
+						"status": "ok",
+						"error": null,
+						"server_ms": [
+							52,
+							51,
+							51,
+							52,
+							51
+						],
+						"end_to_end_ms": [
+							81.4,
+							80.9,
+							80.3,
+							81,
+							80.4
+						]
+					},
+					{
+						"query": 39,
+						"status": "ok",
+						"error": null,
+						"server_ms": [
+							46,
+							49,
+							48,
+							53,
+							47
+						],
+						"end_to_end_ms": [
+							75.4,
+							77.8,
+							78.6,
+							81.7,
+							77.7
+						]
+					},
+					{
+						"query": 40,
+						"status": "ok",
+						"error": null,
+						"server_ms": [
+							140,
+							162,
+							179,
+							135,
+							153
+						],
+						"end_to_end_ms": [
+							168.6,
+							191.5,
+							207.4,
+							165.1,
+							181.3
+						]
+					},
+					{
+						"query": 41,
+						"status": "ok",
+						"error": null,
+						"server_ms": [
+							35,
+							39,
+							34,
+							34,
+							38
+						],
+						"end_to_end_ms": [
+							64.1,
+							68.2,
+							62.9,
+							63,
+							67
+						]
+					},
+					{
+						"query": 42,
+						"status": "ok",
+						"error": null,
+						"server_ms": [
+							26,
+							26,
+							27,
+							26,
+							26
+						],
+						"end_to_end_ms": [
+							55.5,
+							56.2,
+							56.6,
+							54.8,
+							55.1
+						]
+					},
+					{
+						"query": 43,
+						"status": "ok",
+						"error": null,
+						"server_ms": [
+							24,
+							24,
+							24,
+							24,
+							23
+						],
+						"end_to_end_ms": [
+							53,
+							54,
+							52.7,
+							53.7,
+							52.6
+						]
+					}
+				],
+				"concurrent": {
+					"clients": 4,
+					"rounds": 3,
+					"seed": 20261031,
+					"queries_ok": 516,
+					"queries_failed": 0,
+					"failed_queries": {},
+					"errors": []
+				},
+				"price": {
+					"usd_per_hour": 0.39375,
+					"basis": "ClickHouse Cloud Basic plan (its 1-replica 12 GiB / 3 vCPU size) in AWS eu-central-1: $0.2625 per compute-unit-hour (1 unit = 8 GiB / 2 vCPU) x 1.5 units",
+					"source_url": "https://clickhouse.com/pricing",
+					"read_on": "2026-10-31"
+				}
+			}
+		}
+	]
+}

@@ -17,7 +17,7 @@ how many times each query is timed; the defaults are what the published results 
 ## 2. Get the code
 
 ```sh
-git clone <this repo>
+git clone https://github.com/letterstory/obsessiondb-bench.git
 cd obsessiondb-bench
 npm install
 ```
@@ -33,7 +33,7 @@ It runs every contender in `bench.json` on every scenario and writes `results/la
 
 ## 4. Compare with the published results
 
-The published file is `results/latest.json` on `main`.
+The published file: https://raw.githubusercontent.com/letterstory/obsessiondb-bench/main/results/latest.json
 The same results, readable: https://obsessionbench.com
 
 Compare each contender's metrics. Run-to-run noise is expected; METHODOLOGY.md says what counts
@@ -41,5 +41,5 @@ as a real difference. The primary metric is `geomean_query_ms` (lower is better)
 
 ## 5. Report a difference
 
-Open an issue on the repo with your `results/latest.json` and the
+Open an issue at https://github.com/letterstory/obsessiondb-bench/issues with your `results/latest.json` and the
 `environment` it recorded.

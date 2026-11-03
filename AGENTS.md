@@ -25,7 +25,7 @@ no longer works as written.
 - Every page has a title, a description, a canonical URL on https://obsessionbench.com, and the results pages a
   Dataset JSON-LD.
 - The Visitors tag in the root layout's `<head>`, exactly:
-  `<script async src="https://lettervisit.com/v.js" data-key="lv_pub_rfj96k4u6z899fafczsqotu8"></script>`
+  `<script>(function(w,d){var h=null;try{var l=w.localStorage,p=JSON.parse(l.getItem("lv:vp:"+"lv_pub_rfj96k4u6z899fafczsqotu8")||"[]"),q=(location.pathname||"/").replace(/\/{2,}/g,"/").replace(/(.)\/+$/,"$1");if(!l.getItem("lv:seen:"+"lv_pub_rfj96k4u6z899fafczsqotu8")||p.indexOf(q)>=0){h=d.createElement("style");h.textContent="html{opacity:0!important}";d.head.appendChild(h)}l.setItem("lv:seen:"+"lv_pub_rfj96k4u6z899fafczsqotu8","1")}catch(e){}w.__lvReveal=function(){if(h&&h.parentNode)h.parentNode.removeChild(h);h=null};setTimeout(function(){if(h)w.__lvLate=1;w.__lvReveal()},1000);var s=d.createElement("script");s.src="https://lettervisit.com/v.js?k=lv_pub_rfj96k4u6z899fafczsqotu8";s.async=true;s.setAttribute("data-key","lv_pub_rfj96k4u6z899fafczsqotu8");s.onerror=w.__lvReveal;d.head.appendChild(s)})(window,document)</script>`
 - `proxy.ts` at the repo root is the Visitors server snippet (it counts AI agents, which never run
   JavaScript). Keep it as committed.
 - Readable without JavaScript. No trackers besides Visitors.

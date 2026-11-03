@@ -27,7 +27,7 @@ Scenarios:
 ## Run it yourself
 
 ```sh
-git clone <this repo>
+git clone https://github.com/letterstory/obsessiondb-bench.git
 cd obsessiondb-bench
 npm install
 npm run bench

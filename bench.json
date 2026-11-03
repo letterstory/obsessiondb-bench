@@ -4,7 +4,7 @@
 	"name": "ObsessionBench",
 	"tagline": "ObsessionDB vs ClickHouse Cloud on ClickBench: latency, consistency and cost, measured in the open.",
 	"site": "https://obsessionbench.com",
-	"repo": null,
+	"repo": "https://github.com/letterstory/obsessiondb-bench",
 	"license": "MIT",
 	"subject": {
 		"id": "subject",

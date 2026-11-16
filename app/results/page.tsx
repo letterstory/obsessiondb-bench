@@ -12,8 +12,8 @@ export const metadata: Metadata = {
 
 const contenders = [bench.subject, ...bench.competitors];
 
-// history() only returns YYYY-MM-DD.json names; keep just the date digits for anchors and ids.
-const runId = (file: string) => /^(\d{4}-\d{2}-\d{2})/.exec(file)?.[1] ?? "run";
+// Anchors are numbered oldest first, so adding a run never renames an earlier one.
+const runId = (total: number, index: number) => `run-${total - index}`;
 
 export default function ResultsPage() {
 	const runs = history();
@@ -48,10 +48,10 @@ export default function ResultsPage() {
 								</tr>
 							</thead>
 							<tbody>
-								{runs.map(({ file, results }) => (
+								{runs.map(({ file, results }, i) => (
 									<tr key={file}>
 										<th scope="row">
-											<a href={`#${runId(file)}`}>
+											<a href={`#${runId(runs.length, i)}`}>
 												<time dateTime={results.ran_at}>{formatDay(results.ran_at)}</time>
 											</a>
 										</th>
@@ -69,9 +69,9 @@ export default function ResultsPage() {
 						</table>
 					</div>
 					{runs.map(({ file, results }) => (
-						<section key={file} id={runId(file)} className="run" aria-labelledby={`h-${runId(file)}`}>
+						<section key={file} id={runId(runs.length, i)} className="run" aria-labelledby={`h-${runId(runs.length, i)}`}>
 							<div className="section-head">
-								<h2 id={`h-${runId(file)}`}>
+								<h2 id={`h-${runId(runs.length, i)}`}>
 									<time dateTime={results.ran_at}>{formatDate(results.ran_at)}</time>
 								</h2>
 								<p className="run-meta">

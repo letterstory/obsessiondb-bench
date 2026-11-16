@@ -68,7 +68,7 @@ export default function ResultsPage() {
 							</tbody>
 						</table>
 					</div>
-					{runs.map(({ file, results }) => (
+					{runs.map(({ file, results }, i) => (
 						<section key={file} id={runId(runs.length, i)} className="run" aria-labelledby={`h-${runId(runs.length, i)}`}>
 							<div className="section-head">
 								<h2 id={`h-${runId(runs.length, i)}`}>

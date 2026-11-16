@@ -12,7 +12,7 @@ export default function MethodologyPage() {
 	return (
 		<>
 			<Markdown file="METHODOLOGY.md" />
-			<p>
+			<p className="page-foot">
 				Method and code: <a href={bench.repo}>{bench.repo}</a>
 			</p>
 		</>

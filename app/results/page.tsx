@@ -12,6 +12,9 @@ export const metadata: Metadata = {
 
 const contenders = [bench.subject, ...bench.competitors];
 
+// history() only returns YYYY-MM-DD.json names; keep just the date digits for anchors and ids.
+const runId = (file: string) => /^(\d{4}-\d{2}-\d{2})/.exec(file)?.[1] ?? "run";
+
 export default function ResultsPage() {
 	const runs = history();
 	return (
@@ -48,7 +51,7 @@ export default function ResultsPage() {
 								{runs.map(({ file, results }) => (
 									<tr key={file}>
 										<th scope="row">
-											<a href={`#${file.replace(/\.json$/, "")}`}>
+											<a href={`#${runId(file)}`}>
 												<time dateTime={results.ran_at}>{formatDay(results.ran_at)}</time>
 											</a>
 										</th>
@@ -66,9 +69,9 @@ export default function ResultsPage() {
 						</table>
 					</div>
 					{runs.map(({ file, results }) => (
-						<section key={file} id={file.replace(/\.json$/, "")} className="run" aria-labelledby={`h-${file}`}>
+						<section key={file} id={runId(file)} className="run" aria-labelledby={`h-${runId(file)}`}>
 							<div className="section-head">
-								<h2 id={`h-${file}`}>
+								<h2 id={`h-${runId(file)}`}>
 									<time dateTime={results.ran_at}>{formatDate(results.ran_at)}</time>
 								</h2>
 								<p className="run-meta">

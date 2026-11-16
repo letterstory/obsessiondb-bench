@@ -1098,6 +1098,11 @@ main > .run {
 		white-space: nowrap;
 	}
 
+	/* GitHub stays in the footer; five links do not fit a phone header. */
+	nav .nav-ext {
+		display: none;
+	}
+
 	.run-meta {
 		gap: 0.15rem 1rem;
 	}
